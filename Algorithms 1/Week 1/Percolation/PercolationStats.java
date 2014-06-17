@@ -9,15 +9,28 @@
  * Performs multiple Percolation simulations and prints relevant statistics.
  * 
  * ---------------------------------------------------------------------------*/
+
+/**
+ * Class that performs multiple Percolation Threshold simulations and calculates
+ * the mean and other relevant statistics of the simulations.
+ * 
+ * @author Sumit Gouthaman
+ */
 public class PercolationStats {
-    private int N;
-    private double[] percolationThreshold;
+    private int N;                         // Grid size
+    private double[] percolationThreshold; // Array storing results
+    private double mean;                   // mean of all simulations
+    private double stddev;                 // standard deviation
+    private double confidenceLo;           // lower limit of 95% confidence
+    private double confidenceHi;           // upper limit of 95% confidence
     
-    private double mean;
-    private double stddev;
-    private double confidenceLo;
-    private double confidenceHi;
-    
+    /**
+     * Constructor
+     * 
+     * @param N - Grid size
+     * @param T - No of independent experiments
+     * @throws IllegalArgumentException if N or T is <= 0
+     */
     public PercolationStats(int N, int T) {
         if (N <= 0) throw new IllegalArgumentException("N = " + N);
         if (T <= 0) throw new IllegalArgumentException("T = " + T);
@@ -41,22 +54,41 @@ public class PercolationStats {
                            + confidenceHi);
     }
     
+    /**
+     * Returns mean
+     */
     public double mean() {
         return mean;
     }
     
+    /**
+     * Returns standard deviation
+     */
     public double stddev() {
         return stddev;
     }
     
+    /**
+     * Returns lower limit of 95% confidence
+     */
     public double confidenceLo() {
         return confidenceLo;
     }
     
+    /**
+     * Returns upper limit of 95% confidence
+     */
     public double confidenceHi() {
         return confidenceHi;
     }
     
+    /**
+     * Main method
+     * 
+     * @param args[0] - Grid Size
+     * @param args[1] - No of independent experiments
+     * @throws NumberFormatException if N or T is not an integer
+     */
     public static void main(String[] args) {
         int N;
         int T;
@@ -70,6 +102,11 @@ public class PercolationStats {
         new PercolationStats(N, T);
     }
     
+    /**
+     * Run one round of simulations.
+     * 
+     * @returns calculated value of percolation threshold
+     */
     private double runSimulation() {
         Percolation percolation = new Percolation(N);
         int openSites = 0;
