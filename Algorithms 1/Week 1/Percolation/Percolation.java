@@ -20,6 +20,7 @@ public class Percolation {
     
     private boolean[][] grid;               // To track of open & closed sites
     private WeightedQuickUnionUF unionFind; // Keeps track of partitions
+    private WeightedQuickUnionUF fromTop;   // To avoid backwash
     private int TOP = 0;                    // node representing the top
     private int BOTTOM;                     // node representing the bottom
     private int N;                          // Size of grid
@@ -30,9 +31,11 @@ public class Percolation {
      * @param N - Size of grid (i.e. N x N square)
      */
     public Percolation(int N) {
+        if (N <= 0) throw new IllegalArgumentException("N = " + N);
         this.N = N;
         grid = new boolean[N][N];
         unionFind = new WeightedQuickUnionUF(N * N + 2);
+        fromTop = new WeightedQuickUnionUF(N * N + 1);
         BOTTOM = N * N + 1;
     }
     
@@ -81,7 +84,7 @@ public class Percolation {
             throw new IndexOutOfBoundsException("Grid coordinates invalid i = "
                                                     + i + ", j = " + j);
         }
-        return unionFind.connected(TOP, xyTo1D(i, j));
+        return fromTop.connected(TOP, xyTo1D(i, j));
     }
     
     /**
@@ -130,7 +133,10 @@ public class Percolation {
      * @param y - the y co-ordinate of the site
      */
     private void connectToOpenNeighbours(int x, int y) {
-        if (x == 1) unionFind.union(TOP, y);
+        if (x == 1) {
+            unionFind.union(TOP, y);
+            fromTop.union(TOP, y);
+        }
         if (x == N) unionFind.union(xyTo1D(x, y), BOTTOM);
         
         int[][] neighbours = {
@@ -142,9 +148,12 @@ public class Percolation {
         
         for (int[] neighbour: neighbours) {
             if (isIndexValid(neighbour[0], neighbour[1])) {
-                if (isOpen(neighbour[0], neighbour[1]))
+                if (isOpen(neighbour[0], neighbour[1])) {
                     unionFind.union(xyTo1D(x, y), 
                                     xyTo1D(neighbour[0], neighbour[1]));
+                    fromTop.union(xyTo1D(x, y), 
+                                    xyTo1D(neighbour[0], neighbour[1]));
+                }
             }
         }
     }
