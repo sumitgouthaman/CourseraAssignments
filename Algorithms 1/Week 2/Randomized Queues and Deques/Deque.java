@@ -99,7 +99,59 @@ public class Deque<Item> implements Iterable<Item> {
     }
     
     public static void main(String[] args) {
-    
+        Deque<Integer> deque = new Deque<Integer>();
+        int n1, n2;
+        
+        deque.addFirst(10);
+        n1 = deque.removeFirst();
+        if (n1 == 10 && deque.size() == 0) {
+            StdOut.println("Test 01: Passed");
+        } else StdOut.println("Test 01: Failed");
+        
+        deque.addFirst(20);
+        deque.addFirst(30);
+        n1 = deque.removeFirst();
+        if (n1 == 30 && deque.size() == 1) {
+            StdOut.println("Test 02: Passed");
+        } else StdOut.println("Test 02: Failed");
+        
+        n2 = deque.removeFirst();
+        if (n1 == 30 && n2 == 20 && deque.size() == 0) {
+            StdOut.println("Test 03: Passed");
+        } else StdOut.println("Test 03: Failed");
+        
+        deque.addLast(40);
+        deque.addLast(50);
+        if (deque.size() == 2) {
+            StdOut.println("Test 04: Passed");
+        } else StdOut.println("Test 04: Failed");
+        
+        n1 = deque.removeLast();
+        if (n1 == 50 && deque.size() == 1) {
+            StdOut.println("Test 05: Passed");
+        } else StdOut.println("Test 05: Failed");
+        
+        n2 = deque.removeLast();
+        if (n1 == 50 && n2 == 40 && deque.size() == 0) {
+            StdOut.println("Test 06: Passed");
+        } else StdOut.println("Test 06: Failed");
+        
+        deque.addFirst(1);
+        deque.addLast(2);
+        deque.addFirst(3);
+        deque.addLast(4);
+        
+        n1 = deque.removeFirst();
+        n2 = deque.removeLast();
+        if (n1 == 3 && n2 == 4 && deque.size() == 2) {
+            StdOut.println("Test 07: Passed");
+        } else StdOut.println("Test 07: Failed");
+        
+        n1 = deque.removeFirst();
+        n2 = deque.removeLast();
+        if (n1 == 1 && n2 == 2 && deque.size() == 0) {
+            StdOut.println("Test 08: Passed");
+        } else StdOut.println("Test 08: Failed");
     }
     
     private class Node {
@@ -116,7 +168,7 @@ public class Deque<Item> implements Iterable<Item> {
         }
         
         public boolean hasNext() {
-            return (f == null);
+            return !(f == null);
         }
         
         public void remove() {
