@@ -1,7 +1,7 @@
 /**-----------------------------------------------------------------------------
  * Author:           Sumit Gouthaman
  * Written:          23 June 2014
- * Last updated:     23 June 2014
+ * Last updated:     24 June 2014
  * 
  * Compilation:      javac-algs4 Deque.java
  * Execution:        <No main method. Cannot be executed directly>
