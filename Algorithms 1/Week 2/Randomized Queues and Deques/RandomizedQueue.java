@@ -1,7 +1,7 @@
 /**-----------------------------------------------------------------------------
  * Author:           Sumit Gouthaman
  * Written:          25 June 2014
- * Last updated:     25 June 2014
+ * Last updated:     26 June 2014
  * 
  * Compilation:      javac-algs4 RandomizedQueue.java
  * Execution:        <No main method. Cannot be executed directly>
@@ -68,7 +68,48 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
     
     public static void main(String[] args) {
-        // To be implemented
+        RandomizedQueue<Integer> rq = new RandomizedQueue<Integer>();
+        int n1, n2;
+        
+        rq.enqueue(10);
+        if (rq.size() == 1) {
+            StdOut.println("Test 01: Passed");
+        } else StdOut.println("Test 01: Failed");
+        
+        n1 = rq.dequeue();
+        if (n1 == 10 && rq.size() == 0) {
+            StdOut.println("Test 02: Passed");
+        } else StdOut.println("Test 02: Failed");
+        
+        rq.enqueue(20);
+        rq.enqueue(30);
+        
+        if (rq.size() == 2) {
+            StdOut.println("Test 03: Passed");
+        } else StdOut.println("Test 03: Failed");
+        
+        n1 = rq.dequeue();
+        n2 = rq.dequeue();
+        if (((n1 == 20 && n2 == 30) || (n1 == 30 && n2 == 20)) && rq.size() == 0) {
+            StdOut.println("Test 04: Passed");
+        } else StdOut.println("Test 04: Failed");
+        
+        rq.enqueue(1);
+        rq.enqueue(2);
+        rq.enqueue(3);
+        rq.enqueue(4);
+        rq.enqueue(5);
+        rq.enqueue(6);
+        
+        StdOut.println("Iterator test:");
+        for (int i: rq) {
+            StdOut.println("Outer Loop: " + i);
+            StdOut.print("Inner Loop: ");
+            for (int j: rq) {
+                StdOut.print(j + " ");
+            }
+            StdOut.println();
+        }
     }
     
     private void exch(int i, int j) {
