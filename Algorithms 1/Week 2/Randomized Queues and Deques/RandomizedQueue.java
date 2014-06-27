@@ -21,22 +21,44 @@ import java.util.NoSuchElementException;
  * @author Sumit Gouthaman
  */
 public class RandomizedQueue<Item> implements Iterable<Item> {
-    private Item[] items;
-    private int N;
+    /**
+     * This Queue is internally implemented as a growing and shrinking array
+     */
+    private Item[] items;  // Array representing the queue
+    private int N;         // Index next empty position in the array
     
+    /**
+     * Default constructor
+     */
     public RandomizedQueue() {
-        items = (Item[]) new Object[2];
+        items = (Item[]) new Object[2]; // Start with 2 items, grow when needed
         N = 0;
     }
     
+    /**
+     * Returns if the Queue is empty
+     * 
+     * @returns Boolean representing if the queue is empty
+     */
     public boolean isEmpty() {
         return N == 0;
     }
     
+    /**
+     * Returns current size of the queue
+     * 
+     * @returns size of the queue
+     */
     public int size() {
         return N;
     }
     
+    /**
+     * Add element to the queue
+     * 
+     * @param item The item to be added
+     * @throws NullPointerException if item is null
+     */
     public void enqueue(Item item) {
         if (item == null) throw new NullPointerException();
         int newSize = N + 1;
@@ -44,12 +66,25 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             doubleSize();
         }
         items[N] = item;
+        /**
+         * The queue is maintained as a random queue as it grows
+         */
         int randomIndex = StdRandom.uniform(0, N + 1);
         exch(randomIndex, N);
         N++;
     }
     
+    /**
+     * Remove and return a random element from the queue
+     * 
+     * @returns the removed element
+     * @throws NoSuchElementException if queue is empty
+     */
     public Item dequeue() {
+        /**
+         * Since the array is maintainted as a shuffled queue when elements are
+         * added, we just need to return the last element on dequeue
+         */
         if (N == 0) throw new NoSuchElementException();
         Item toBeReturned = items[--N];
         items[N] = null; //To prevent loitering
@@ -59,14 +94,29 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         return toBeReturned;
     }
     
+    /**
+     * Returns (but does not remove) a random element from the queue
+     * 
+     * @returns a random element from the queue
+     * @throws NoSuchElementException if queue is empty
+     */
     public Item sample() {
+        if (N == 0) throw new NoSuchElementException();
         return items[StdRandom.uniform(0, N)];
     }
     
+    /**
+     * Returns a iterator to traverse the elements of the queue in random order
+     * 
+     * @returns a random iterator
+     */
     public Iterator<Item> iterator() {
         return new RandomizedIterator();
     }
     
+    /**
+     * Main method for unit testing
+     */
     public static void main(String[] args) {
         RandomizedQueue<Integer> rq = new RandomizedQueue<Integer>();
         int n1, n2;
@@ -112,18 +162,30 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         }
     }
     
+    /**
+     * Function that exchanges the items in two positions of the array
+     * 
+     * @param i the first index
+     * @param j the second index
+     */
     private void exch(int i, int j) {
         Item temp = items[i];
         items[i] = items[j];
         items[j] = temp;
     }
     
+    /**
+     * Double the size of the array and copy elements to the new array
+     */
     private void doubleSize() {
         Item[] newArray = (Item[]) new Object[items.length * 2];
         System.arraycopy(items, 0, newArray, 0 , items.length);
         items = newArray;
     }
     
+    /**
+     * Shrink the size of the array and copy elements to the new array
+     */
     private void halveSize() {
         if (items.length <= 2) return;
         Item[] newArray = (Item[]) new Object[items.length / 2];
@@ -131,11 +193,17 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         items = newArray;
     }
     
+    /**
+     * Iterator implementation to traverse the queue in random order.
+     */
     private class RandomizedIterator implements Iterator<Item> {
-        private Item[] snapshot;
+        private Item[] snapshot; // A snapshot of the items
         
-        private int currIndex;
+        private int currIndex;   // Index of next item to be returned
         
+        /**
+         * Default constructor
+         */
         public RandomizedIterator() {
             snapshot = (Item[]) new Object[N];
             System.arraycopy(items, 0, snapshot, 0, N);
@@ -143,14 +211,30 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             currIndex = 0;
         }
         
+        /**
+         * Returns whether any more elements are left to be returned
+         *
+         * @returns Boolean representing if any more elements are left
+         */
         public boolean hasNext() {
             return (currIndex < snapshot.length);
         }
         
+        /**
+         * Removing elements is not supported
+         * 
+         * @throws UnsupportedOperationException
+         */
         public void remove() {
             throw new UnsupportedOperationException();
         }
         
+        /**
+         * Return next element in the deck
+         * 
+         * @returns next element in deque
+         * @throws NoSuchElementException if no more elements are left
+         */
         public Item next() {
             if (hasNext()) {
                 return snapshot[currIndex++];
