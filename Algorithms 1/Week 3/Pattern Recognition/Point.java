@@ -15,9 +15,8 @@ import java.util.Comparator;
 
 public class Point implements Comparable<Point> {
 
-    // compare points by slope
-    public final Comparator<Point> SLOPE_ORDER;       // YOUR DEFINITION HERE
-
+    public final Comparator<Point> SLOPE_ORDER = new SlopeOrderComparator();
+    
     private final int x;                              // x coordinate
     private final int y;                              // y coordinate
 
@@ -43,18 +42,37 @@ public class Point implements Comparable<Point> {
     // slope between this point and that point
     public double slopeTo(Point that) {
         /* YOUR CODE HERE */
+        if (this.y == that.y && this.x == that.x) return Double.NEGATIVE_INFINITY;
+        else if (this.y == that.y) return 0.0;
+        else if (this.x == that.x) return Double.POSITIVE_INFINITY;
+        else return ((double) (that.y - this.y) / (double) (that.x - this.x));
     }
 
     // is this point lexicographically smaller than that one?
     // comparing y-coordinates and breaking ties by x-coordinates
     public int compareTo(Point that) {
         /* YOUR CODE HERE */
+        if (this.y < that.y) return -1;
+        else if ((this.y == that.y) && (this.x < that.x)) return -1;
+        else if ((this.y == that.y) && (this.x == that.x)) return 0;
+        else return 1;
     }
 
     // return string representation of this point
     public String toString() {
         /* DO NOT MODIFY */
         return "(" + x + ", " + y + ")";
+    }
+    
+    // compare points by slopedouble s1 = Point.this.slopeTo(p1);
+    public final class SlopeOrderComparator implements Comparator<Point> {
+        public int compare(Point p1, Point p2) {
+            double s1 = Point.this.slopeTo(p1);
+            double s2 = Point.this.slopeTo(p2);
+            if (s1 < s2) return -1;
+            else if (s1 == s2) return 0;
+            else return 1;
+        }
     }
 
     // unit test
