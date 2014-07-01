@@ -41,7 +41,7 @@ public class Brute {
         
         StdDraw.show(0);
     }
-    public static void checkCollinear(Point p1, Point p2, Point p3, Point p4) {
+    private static void checkCollinear(Point p1, Point p2, Point p3, Point p4) {
         Point[] pts = {p1, p2, p3, p4};
         Arrays.sort(pts);
         if (pts[0].slopeTo(pts[1]) == pts[0].slopeTo(pts[2])) {

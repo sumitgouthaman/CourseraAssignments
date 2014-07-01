@@ -65,7 +65,7 @@ public class Point implements Comparable<Point> {
     }
     
     // compare points by slopedouble s1 = Point.this.slopeTo(p1);
-    public final class SlopeOrderComparator implements Comparator<Point> {
+    private final class SlopeOrderComparator implements Comparator<Point> {
         public int compare(Point p1, Point p2) {
             double s1 = Point.this.slopeTo(p1);
             double s2 = Point.this.slopeTo(p2);
