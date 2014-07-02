@@ -1,7 +1,7 @@
 /**-----------------------------------------------------------------------------
  * Author:           Sumit Gouthaman
  * Written:          30 June 2014
- * Last updated:     30 June 2014
+ * Last updated:     1 July 2014
  * 
  * Compilation:      javac-algs4 Fast.java
  * Execution:        java-algs4 Fast
@@ -9,7 +9,6 @@
  * Fast algorithm to find collinear points in a plane.
  * 
  *--------------------------------------------------------------------------- */
-import java.io.File;
 import java.util.Arrays;
 
 public class Fast {
@@ -19,13 +18,14 @@ public class Fast {
         StdDraw.setYscale(0, 32768);
         StdDraw.show(0);
         
-        In in = new In(new File(args[0]));
+        In in = new In(args[0]);
         int P = in.readInt();
         Point[] orgPoints = new Point[P];
         for (int p = 0; p < P; p++) {
             int x = in.readInt();
             int y = in.readInt();
             orgPoints[p] = new Point(x, y);
+            orgPoints[p].draw();
         }
         
         Point[] points = new Point[P];
@@ -67,7 +67,7 @@ public class Fast {
     private static void printLine(Point[] pts, int i, int j) {
         int iCopy = i;
         while (iCopy <= j) {
-            StdOut.print(pts[i]);
+            StdOut.print(pts[iCopy]);
             if (iCopy < j) {
                 StdOut.print(" -> ");
             }
