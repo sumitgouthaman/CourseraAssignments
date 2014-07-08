@@ -3,7 +3,7 @@ import java.util.Arrays;
 
 public class Board {
     private final int N;
-    private final int[] board;
+    private final short[] board;
     private final int manhattanD;
     private final int hammingD;
     private int blank;
@@ -12,9 +12,9 @@ public class Board {
         this(get1DArray(blocks), blocks.length);
     }
     
-    private Board(int[] blocks, int N) {
+    private Board(short[] blocks, int N) {
         this.N = N;
-        this.board = new int[N * N];
+        this.board = new short[N * N];
         int pos = 0;
         int hamD = 0;
         int manD = 0;
@@ -69,7 +69,7 @@ public class Board {
         } else {
             swapRow = blankX - 1;
         }
-        int[] copy = new int[N * N];
+        short[] copy = new short[N * N];
         System.arraycopy(this.board, 0, copy, 0, N * N);
         exch(copy, to1Dim(swapRow, 0), to1Dim(swapRow, 1));
         return new Board(copy, N);
@@ -102,7 +102,7 @@ public class Board {
     public Iterable<Board> neighbors() {
         int[] possibilities = getNeighbourPos(blank);
         ArrayList<Board> neighbours = new ArrayList<Board>();
-        int[] temp = new int[N * N];
+        short[] temp = new short[N * N];
         System.arraycopy(board, 0, temp, 0, N * N);
         for (int possibility: possibilities) {
             exch(temp, blank, possibility);
@@ -124,17 +124,20 @@ public class Board {
         return (p % N);
     }
     
-    private static void exch(int[] arr, int pos1, int pos2) {
-        int temp = arr[pos1];
+    private static void exch(short[] arr, int pos1, int pos2) {
+        short temp = arr[pos1];
         arr[pos1] = arr[pos2];
         arr[pos2] = temp;
     }
     
-    private static int[] get1DArray(int[][] blocks) {
+    private static short[] get1DArray(int[][] blocks) {
         int n = blocks.length;
-        int[] temp = new int[n * n];
+        short[] temp = new short[n * n];
+        int pos = 0;
         for (int i = 0; i < n; i++) {
-            System.arraycopy(blocks[i], 0, temp, (i * n), n);
+            for (int j = 0; j < n; j++) {
+                temp[pos++] = (short) blocks[i][j];
+            }
         }
         return temp;
     }
