@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Board {
     private final int N;
@@ -52,7 +53,8 @@ public class Board {
     
     public boolean isGoal() {
         for (int i = 0; i < (N * N); i++) {
-            if (board[i] != i+1 && board[i] != 0) {
+            if (board[i] == 0) continue;
+            if (board[i] != (i + 1)) {
                 return false;
             }
         }
@@ -74,6 +76,7 @@ public class Board {
     }
     
     public boolean equals(Object y) {
+        if (this == y) return true;
         if (y == null) return false;
         if (this.getClass() != y.getClass()) return false;
         Board yBoard = (Board) y;
@@ -110,15 +113,15 @@ public class Board {
     }
         
     private int to1Dim(int x, int y) {
-        return (y * N) + x;
+        return (x * N) + y;
     }
      
     private int to2Dx(int p) {
-        return (p % N);
+        return (p / N);
     }
     
     private int to2Dy(int p) {
-        return (p / N);
+        return (p % N);
     }
     
     private static void exch(int[] arr, int pos1, int pos2) {
