@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Board {
     private final int N;
@@ -113,6 +112,8 @@ public class Board {
     }
         
     private int to1Dim(int x, int y) {
+        if (x >= N || y >= N) return Integer.MAX_VALUE;
+        if (x < 0 || y < 0) return Integer.MIN_VALUE;
         return (x * N) + y;
     }
      
