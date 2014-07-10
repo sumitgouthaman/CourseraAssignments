@@ -11,6 +11,12 @@
  *--------------------------------------------------------------------------- */
 import java.util.Arrays;
 
+/**
+ * Class to use brute force method to find all sets of 4 points that are
+ * collinear.
+ * 
+ * @author Sumit Gouthaman
+ */
 public class Brute {
     public static void main(String[] args) {
         // rescale coordinates and turn on animation mode
@@ -18,10 +24,12 @@ public class Brute {
         StdDraw.setYscale(0, 32768);
         StdDraw.show(0);
         
-        In in = new In(args[0]);
-        int P = in.readInt();
-        Point[] points = new Point[P];
+        In in = new In(args[0]);       // Input file
+        int P = in.readInt();          // Total no of points
+        Point[] points = new Point[P]; // Array of all points
+        
         for (int p = 0; p < P; p++) {
+            // Read each point, store and draw it.
             int x = in.readInt();
             int y = in.readInt();
             points[p] = new Point(x, y);
@@ -32,6 +40,7 @@ public class Brute {
             for (int i2 = (i1 + 1); i2 < (P - 2); i2++) {
                 for (int i3 = (i2 + 1); i3 < (P - 1); i3++) {
                     for (int i4 = (i3 + 1); i4 < P; i4++) {
+                        // For each possible set of 4 points check if collinear
                         checkCollinear(points[i1], points[i2], points[i3], 
                                        points[i4]);
                     }
@@ -41,6 +50,16 @@ public class Brute {
         
         StdDraw.show(0);
     }
+    
+    /**
+     * Check if a set of four points is collinear. If yes, print them to stdout
+     * and draw the line.
+     * 
+     * @param p1 The first line
+     * @param p2 The second line
+     * @param p3 The third line
+     * @param p4 The fourth line
+     */
     private static void checkCollinear(Point p1, Point p2, Point p3, Point p4) {
         Point[] pts = {p1, p2, p3, p4};
         if (pts[0].slopeTo(pts[1]) == pts[0].slopeTo(pts[2])) {

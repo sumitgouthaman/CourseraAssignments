@@ -1,7 +1,7 @@
 /*************************************************************************
  * Author:           Sumit Gouthaman
  * Written:          30 June 2014
- * Last updated:     30 June 2014
+ * Last updated:     9 July 2014
  *
  * Compilation:  javac Point.java
  * Execution:
@@ -13,10 +13,19 @@
 
 import java.util.Comparator;
 
+/**
+ * Class to replresent a point. Also handles drawing points and lines between
+ * two points.
+ * 
+ * Implements comparator to compare two points based on slope it makes with the
+ * given point.
+ * 
+ * @author Sumit Gouthaman
+ */
 public class Point implements Comparable<Point> {
 
     public final Comparator<Point> SLOPE_ORDER = new SlopeOrderComparator();
-    
+                                  // Comparator to compare based on polar angle
     private final int x;                              // x coordinate
     private final int y;                              // y coordinate
 
