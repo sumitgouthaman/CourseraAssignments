@@ -1,16 +1,56 @@
+/**-----------------------------------------------------------------------------
+ * Author:           Sumit Gouthaman
+ * Written:          8 June 2014
+ * Last updated:     9 July 2014
+ * 
+ * Compilation:      javac-algs4 Board.java
+ * 
+ * Stores a state of the board in 8 Puzzle solution tree
+ * 
+ *--------------------------------------------------------------------------- */
 import java.util.ArrayList;
 
+/**
+ * Class to represent and store a certain state of the Board during the state
+ * space search of 8 Puzzle.
+ * 
+ * @author Sumit Gouthaman
+ */
 public class Board {
-    private final int N;
-    private final short[] board;
-    private final int manhattanD;
-    private final int hammingD;
-    private int blank;
     
+    /**
+     * NOTE:
+     * Internally we use a short[] intead of int[][] to store the board as a way
+     * to reduce space requirement and because the maximum dimension of board in
+     * the assignment is 128. And a short is enough to store 128 x 128.
+     */
+    
+    private final int N;          // Dimension of the board
+    private final short[] board;  // The actual board in 1D representation
+    private final int manhattanD; // Manhattan distance
+    private final int hammingD;   // Hamming distance
+    private int blank;            // Position of blank in 1D representation
+    
+    /**
+     * Public Contructor
+     * 
+     * Takes a 2 dimentional board, makes the necessary converstion to represent
+     * it as a 1D array and performs calculations for manhattan and hamming
+     * distance
+     * 
+     * @param blocks 2D int array representing the board
+     */
     public Board(int[][] blocks) {
         this(get1DArray(blocks), blocks.length);
     }
     
+    /**
+     * Private constructor that can directly initialize the Board from a 1D
+     * array of shorts.
+     * 
+     * @param blocks 1D array representing a 2D board
+     * @param N Dimension of the board
+     */
     private Board(short[] blocks, int N) {
         this.N = N;
         this.board = new short[N * N];
@@ -23,6 +63,7 @@ public class Board {
                 if (board[pos] == 0) {
                     blank = pos;
                 }
+                // Keep track of manhattan and hamming distances
                 if (board[pos] != (pos + 1) && board[pos] != 0) {
                     hamD++;
                 }
@@ -37,19 +78,39 @@ public class Board {
         hammingD = hamD;
         manhattanD = manD;
     }
-             
+    
+    /**
+     * Return dimension of the board
+     * 
+     * @returns The dimentsion of the board
+     */
     public int dimension() {
         return N;
     }
     
+    /**
+     * Returns hamming distance of the board from the goal board
+     * 
+     * @returns The hamming distance of the board
+     */
     public int hamming() {
         return hammingD;
     }
     
+    /**
+     * Returns manhattan distance of the board from the goal board
+     * 
+     * @returns The hamming distance of the board
+     */
     public int manhattan() {
         return manhattanD;
     }
     
+    /**
+     * Returns whether the board is the goal board
+     * 
+     * @returns boolean representing if the board is the goal board
+     */
     public boolean isGoal() {
         for (int i = 0; i < (N * N); i++) {
             if (board[i] == 0) continue;
@@ -60,6 +121,13 @@ public class Board {
         return true;
     }
     
+    /**
+     * Returns a twin for the board.
+     * A twin is a similar board with two tiles in any non blank containing
+     * row exchanged.
+     * 
+     * @returns The twin of this board
+     */
     public Board twin() {
         int blankX = to2Dx(blank);
         int swapRow;
@@ -74,6 +142,9 @@ public class Board {
         return new Board(copy, N);
     }
     
+    /**
+     * @returns if the two board are equal
+     */
     public boolean equals(Object y) {
         if (this == y) return true;
         if (y == null) return false;
@@ -86,6 +157,9 @@ public class Board {
         return true;
     }
     
+    /**
+     * @returns A string representation of the board
+     */
     public String toString() {
         StringBuilder s = new StringBuilder();
         s.append(N + "\n");
@@ -98,6 +172,9 @@ public class Board {
         return s.toString();
     }
     
+    /**
+     * @returns A iterable set of all neighbors of the current board
+     */
     public Iterable<Board> neighbors() {
         int[] possibilities = getNeighbourPos(blank);
         ArrayList<Board> neighbours = new ArrayList<Board>();
@@ -110,17 +187,32 @@ public class Board {
         }
         return neighbours;
     }
-        
+    
+    /**
+     * Convert from 2D coordinates to a 1D position.
+     * In cases where the 2D coordinate is out of bounds, return extreme
+     * integer values.
+     * 
+     * @param x Coordinate representing row
+     * @param y Coordinate representing column
+     * @returns The 1D coordinate
+     */
     private int to1Dim(int x, int y) {
         if (x >= N || y >= N) return Integer.MAX_VALUE;
         if (x < 0 || y < 0) return Integer.MIN_VALUE;
         return (x * N) + y;
     }
      
+    /**
+     * @returns the 2D x coordinate for a 1D coordinate
+     */
     private int to2Dx(int p) {
         return (p / N);
     }
     
+    /**
+     * @returns the 2D y coordinate for a 1D coordinate
+     */
     private int to2Dy(int p) {
         return (p % N);
     }
@@ -131,6 +223,12 @@ public class Board {
         arr[pos2] = temp;
     }
     
+    /**
+     * Convert from a 2D matrix of ints to a 1D array of shorts
+     * 
+     * @param blocks The 2D matrix of ints
+     * @returns a 1D array of shorts
+     */
     private static short[] get1DArray(int[][] blocks) {
         int n = blocks.length;
         short[] temp = new short[n * n];
@@ -143,6 +241,12 @@ public class Board {
         return temp;
     }
     
+    /**
+     * Get all valid neighbor positions for the given position
+     * 
+     * @param pos The current position
+     * @returns The set of valid neighbors
+     */
     private int[] getNeighbourPos(int pos) {
         ArrayList<Integer> nPos = new ArrayList<Integer>();
         int x = to2Dx(pos);

@@ -25,7 +25,8 @@ public class Solver {
             
             Iterable<Board> neighbors = currentNode.getBoard().neighbors();
             for (Board neighbor: neighbors) {
-                if (!currentNode.getBoard().equals(neighbor)) {
+                //if (!currentNode.getBoard().equals(neighbor)) {
+                if (!boardVisited(currentNode, neighbor)) {
                     minPQ.insert(new SearchNode(neighbor, 
                                  currentNode.getNoOfMoves() + 1, currentNode));
                 }
@@ -34,7 +35,8 @@ public class Solver {
             Iterable<Board> neighborsTwin = currentNodeTwin.getBoard()
                                                            .neighbors();
             for (Board neighbor: neighborsTwin) {
-                if (!currentNodeTwin.getBoard().equals(neighbor)) {
+                //if (!currentNodeTwin.getBoard().equals(neighbor)) {
+                if (!boardVisited(currentNodeTwin, neighbor)) {
                     minPQTwin.insert(new SearchNode(neighbor, 
                         currentNodeTwin.getNoOfMoves() + 1, currentNodeTwin
                     ));
@@ -105,7 +107,9 @@ public class Solver {
         }
         
         public int compareTo(SearchNode that) {
-            return (this.priority - that.priority);
+            if (this.priority != that.priority)
+                return (this.priority - that.priority);
+            return this.board.manhattan() - that.board.manhattan();
         }
         
         public SearchNode getPrevious() {
@@ -122,5 +126,14 @@ public class Solver {
             currentNode = currentNode.getPrevious();
         }
         return stack;
+    }
+    
+    private boolean boardVisited(SearchNode node, Board board) {
+        SearchNode currentNode = node;
+        while (currentNode != null) {
+            if (currentNode.getBoard().equals(board)) return true;
+            currentNode = currentNode.getPrevious();
+        }
+        return false;
     }
 }
