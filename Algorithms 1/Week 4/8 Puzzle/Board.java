@@ -29,7 +29,8 @@ public class Board {
     private final short[] board;  // The actual board in 1D representation
     private final int manhattanD; // Manhattan distance
     private final int hammingD;   // Hamming distance
-    private int blank;            // Position of blank in 1D representation
+    private int blank;      // Position of blank in 1D representation
+    private final boolean isGoal; // Whether this board is the goal
     
     /**
      * Public Contructor
@@ -57,6 +58,7 @@ public class Board {
         int pos = 0;
         int hamD = 0;
         int manD = 0;
+        boolean goal = true;
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 this.board[pos] = blocks[to1Dim(i, j)];
@@ -72,11 +74,15 @@ public class Board {
                     int targetY = to2Dy(board[pos] - 1);
                     manD += Math.abs(targetX - i) + Math.abs(targetY - j);
                 }
+                if (board[pos] != (pos + 1) && pos != (N*N - 1)) {
+                    goal = false;
+                }
                 pos++;
             }
         }
         hammingD = hamD;
         manhattanD = manD;
+        isGoal = goal;
     }
     
     /**
@@ -112,13 +118,7 @@ public class Board {
      * @returns boolean representing if the board is the goal board
      */
     public boolean isGoal() {
-        for (int i = 0; i < (N * N); i++) {
-            if (board[i] == 0) continue;
-            if (board[i] != (i + 1)) {
-                return false;
-            }
-        }
-        return true;
+        return isGoal;
     }
     
     /**
