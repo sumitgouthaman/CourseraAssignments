@@ -1,0 +1,35 @@
+SELECT similarity FROM (
+    SELECT A.docid as docid1, 
+        B.docid as docid2, 
+        SUM (A.count * B.count) as similarity
+    FROM frequency A, frequency B
+    WHERE A.term = B.term AND A.docid = '10080_txt_crude' AND B.docid = '17035_txt_earn'
+    GROUP BY A.docid, B.docid
+)
+WHERE docid1 = '10080_txt_crude' AND docid2 = '17035_txt_earn';
+
+SELECT max(similarity) FROM (
+    SELECT A.docid as docid1, 
+        B.docid as docid2, 
+        SUM (A.count * B.count) as similarity
+    FROM ( 
+        SELECT * FROM frequency
+        UNION
+        SELECT 'q' as docid, 'washington' as term, 1 as count 
+        UNION
+        SELECT 'q' as docid, 'taxes' as term, 1 as count
+        UNION 
+        SELECT 'q' as docid, 'treasury' as term, 1 as count
+    ) A, 
+    ( 
+        SELECT * FROM frequency
+        UNION
+        SELECT 'q' as docid, 'washington' as term, 1 as count 
+        UNION
+        SELECT 'q' as docid, 'taxes' as term, 1 as count
+        UNION 
+        SELECT 'q' as docid, 'treasury' as term, 1 as count
+    ) B
+    WHERE A.term = B.term AND A.docid = 'q'
+    GROUP BY A.docid, B.docid
+);
