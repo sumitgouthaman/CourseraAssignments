@@ -66,45 +66,55 @@ public class KdTree {
             nearestPt.p = node.p;
             nearestPt.dist = p.distanceSquaredTo(node.p);
         } else {
-            if (node.rect.distanceSquaredTo(p) > nearestPt.dist) return;
-            
             double dist = p.distanceSquaredTo(node.p);
             if (dist < nearestPt.dist) {
                 nearestPt.p = node.p;
                 nearestPt.dist = dist;
             }
         }
-       nearest(node.lb, p, nearestPt, !direction);
-       nearest(node.rt, p, nearestPt, !direction);
+        if (direction == VERTICAL) {
+            if (p.x() <= node.p.x()) {
+                nearest(node.lb, p, nearestPt, !direction);
+                if (node.rt != null 
+                        && node.rt.rect.distanceSquaredTo(p) < nearestPt.dist) {
+                    nearest(node.rt, p, nearestPt, !direction);
+                }
+            } else if (p.x() >= node.p.x()) {
+                nearest(node.rt, p, nearestPt, !direction);
+                if (node.lb != null
+                        && node.lb.rect.distanceSquaredTo(p) < nearestPt.dist) {
+                    nearest(node.lb, p, nearestPt, !direction);
+                }
+            }
+        } else {
+            if (p.y() <= node.p.y()) {
+                nearest(node.lb, p, nearestPt, !direction);
+                if (node.rt != null 
+                        && node.rt.rect.distanceSquaredTo(p) < nearestPt.dist) {
+                    nearest(node.rt, p, nearestPt, !direction);
+                }
+            } else if (p.y() >= node.p.y()) {
+                nearest(node.rt, p, nearestPt, !direction);
+                if (node.lb != null 
+                        && node.lb.rect.distanceSquaredTo(p) < nearestPt.dist) {
+                    nearest(node.lb, p, nearestPt, !direction);
+                }
+            }
+        }
     }
     
     private void range(Node node, RectHV rect, Stack<Point2D> points, 
                        boolean direction) {
         if (node == null) return;
         
-//        if (node.p.x() > rect.xmin() && node.p.x() < rect.xmax()
-//           && node.p.y() > rect.ymin() && node.p.y() < rect.ymax()) 
         if (rect.contains(node.p))    
             points.push(node.p);
         
-        if (direction == VERTICAL) {
-            if (rect.xmin() < node.p.x() && rect.xmax() > node.p.x()) {
-                range(node.lb, rect, points, !direction);
-                range(node.rt, rect, points, !direction);
-            } else if (rect.xmax() < node.p.x()) {
-                range(node.lb, rect, points, !direction);
-            } else if (rect.xmin() > node.p.x()) {
-                range(node.rt, rect, points, !direction);
-            }
-        } else {
-            if (rect.ymin() < node.p.y() && rect.ymax() > node.p.y()) {
-                range(node.lb, rect, points, !direction);
-                range(node.rt, rect, points, !direction);
-            } else if (rect.ymax() < node.p.y()) {
-                range(node.lb, rect, points, !direction);
-            } else if (rect.ymin() > node.p.y()) {
-                range(node.rt, rect, points, !direction);
-            }
+        if (node.lb != null && node.lb.rect.intersects(rect)) {
+            range(node.lb, rect, points, !direction);
+        }
+        if (node.rt != null && node.rt.rect.intersects(rect)) {
+            range(node.rt, rect, points, !direction);
         }
     }
     
